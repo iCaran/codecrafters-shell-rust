@@ -24,6 +24,8 @@ fn main() {
         // Check if the command is empty or unrecognized
         if command.is_empty() {
             continue; // Skip empty input
+        } else if command=="exit 0" {
+            break;
         } else {
             // Print the error message for an unrecognized command
             println!("{}: command not found", command);
