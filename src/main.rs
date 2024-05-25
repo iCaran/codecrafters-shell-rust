@@ -26,6 +26,13 @@ fn main() {
             continue; // Skip empty input
         } else if command=="exit 0" {
             break;
+        } else if command.starts_with("type ") {
+            let type_args = &command[5..]; // Get the arguments after "echo "
+            if type_args=="type" || type_args=="echo" || type_args=="exit" || type_args=="cat" {
+                println!("{} is a shell builtin", type_args);
+            } else {
+                println!("{} not found", type_args);
+            }
         } else if command.starts_with("echo ") {
             // Handle the echo command
             let echo_args = &command[5..]; // Get the arguments after "echo "
