@@ -3,6 +3,7 @@ use std::env;
 use std::fs;
 use std::io::{self, Write};
 use std::path::Path;
+use std::process::Command;
 
 fn main() {
     let stdin = io::stdin();
@@ -45,8 +46,26 @@ fn main() {
                 println!("{} not found", type_args);
             }
         } else {
-            // Print the error message for an unrecognized command
-            println!("{}: command not found", command);
+            // Handle external commands
+            let mut parts = command.split_whitespace();
+            if let Some(program) = parts.next() {
+                let args: Vec<&str> = parts.collect();
+                if let Some(executable_path) = find_executable(program) {
+                    match Command::new(executable_path)
+                        .args(&args)
+                        .output() {
+                        Ok(output) => {
+                            io::stdout().write_all(&output.stdout).unwrap();
+                            io::stderr().write_all(&output.stderr).unwrap();
+                        },
+                        Err(e) => {
+                            eprintln!("Failed to execute {}: {}", program, e);
+                        },
+                    }
+                } else {
+                    println!("{}: command not found", program);
+                }
+            }
         }
     }
 }
