@@ -26,6 +26,10 @@ fn main() {
             continue; // Skip empty input
         } else if command=="exit 0" {
             break;
+        } else if command.starts_with("echo ") {
+            // Handle the echo command
+            let echo_args = &command[5..]; // Get the arguments after "echo "
+            println!("{}", echo_args);
         } else {
             // Print the error message for an unrecognized command
             println!("{}: command not found", command);
