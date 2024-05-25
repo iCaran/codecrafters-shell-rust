@@ -2,26 +2,31 @@
 use std::io::{self, Write};
 
 fn main() {
-    // You can use print statements as follows for debugging, they'll be visible when running tests.
-    // println!("Logs from your program will appear here!");
-
-    // Uncomment this block to pass the first stage
-    print!("$ ");
-    io::stdout().flush().unwrap();
-
-    // Wait for user input
     let stdin = io::stdin();
-    let mut input = String::new();
-    stdin.read_line(&mut input).unwrap();
 
-    // Trim the input to remove any extra whitespace
-    let command = input.trim();
+    loop {
+        // Print the prompt
+        print!("$ ");
+        io::stdout().flush().unwrap();
 
-    // Check if the command is empty or unrecognized
-    if command.is_empty() {
-        // If the command is empty, you can choose to ignore or handle it accordingly
-    } else {
-        // Print the error message for an unrecognized command
-        println!("{}: command not found", command);
+        // Read the user input
+        let mut input = String::new();
+        let bytes_read = stdin.read_line(&mut input).unwrap();
+
+        // If bytes_read is 0, it means EOF (Ctrl+D), break the loop
+        if bytes_read == 0 {
+            break;
+        }
+
+        // Trim the input to remove any extra whitespace
+        let command = input.trim();
+
+        // Check if the command is empty or unrecognized
+        if command.is_empty() {
+            continue; // Skip empty input
+        } else {
+            // Print the error message for an unrecognized command
+            println!("{}: command not found", command);
+        }
     }
 }
